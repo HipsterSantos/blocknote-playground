@@ -9,8 +9,14 @@ function App() {
   
     // Creates a new editor instance.
     const editor = useBlockNote({});
+    const styles = editor.getActiveStyles();
+    console.log('active-style',styles)
     editor.onEditorContentChange(e=>{
+      const text = editor.getSelectedText();
+
       console.log('on-block-change,--',e)
+      console.log('selected-text--',text)
+
       console.log('\n\n----editor-current---',editor.getTextCursorPosition().block)
       console.log('\n\n----editor-next---',editor.getTextCursorPosition().nextBlock)
       console.log('\n\n----editor-previous---',editor.getTextCursorPosition().prevBlock)
