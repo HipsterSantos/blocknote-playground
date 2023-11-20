@@ -1,34 +1,45 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
+import { BlockNoteEditor } from "@blocknote/core";
+import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import "@blocknote/core/style.css";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  
+    // Creates a new editor instance.
+    const editor = useBlockNote({});
+    editor.onEditorContentChange(e=>{
+      console.log('on-block-change,--',e)
+      console.log('\n\n----editor-current---',editor.getTextCursorPosition().block)
+      console.log('\n\n----editor-next---',editor.getTextCursorPosition().nextBlock)
+      console.log('\n\n----editor-previous---',editor.getTextCursorPosition().prevBlock)
+    })
+    const onInserBlock = ()=>{
+      editor.insertBlocks([
+        {
+          content:'something to test right here',
+          type: 'heading'
+        }
+      ],editor.getTextCursorPosition().block,
+      'after')
+    }
+    const onUpdateBlock = ()=>{
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    }
+    const onDeleteBlock = ()=>{
+
+    }
+  
+  return (<div style={{
+    width: '100%',
+    background: '#fff'
+  }}>
+    <button onClick={onInserBlock}>inser block </button>
+    <button onClick={onDeleteBlock}>delete block</button>
+    <button onClick={onUpdateBlock}>update block</button>
+    <BlockNoteView editor={editor} />
+  </div>
   )
 }
 
