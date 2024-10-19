@@ -1,14 +1,52 @@
 import { useState } from 'react'
 
 import { BlockNoteEditor } from "@blocknote/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import { BlockNoteView, useBlockNote, getDefaultReactSlashMenuItems } from "@blocknote/react";
+// import {HiOutlineGlobalAlt} from 'react-icons/hi';
 import "@blocknote/core/style.css";
 import './App.css'
 
+
+const actionToExecute = (editor)=>{
+  const currentElement = editor.getTextCursorPosition().block;
+
+  const blockToInsert = {
+    type:'paragraph',
+    content:[
+      {
+        type:'text',
+        text:'Hello world',
+        styles:{
+          bold: true
+        }
+      }
+    ]
+  }
+  editor.insertBlocks([blockToInsert],currentElement,'after')
+}
+
+const slashMenuItem = {
+  name:'Insert-me',
+  execute: actionToExecute,
+  alias:['hello','insert-me'],
+  group:'Inteligencia artificial',
+  icon:<i>A</i>,
+  hint: 'Use this to inser custom bold item'
+
+}
+const slashMenuItems = [
+  ...getDefaultReactSlashMenuItems(),
+  slashMenuItem
+]
+
+
 function App() {
-  
+
     // Creates a new editor instance.
-    const editor = useBlockNote({});
+    const editor = useBlockNote({
+      slashMenuItems
+    });
+
     const styles = editor.getActiveStyles();
     console.log('active-style',styles)
     editor.onEditorContentChange(e=>{
